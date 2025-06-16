@@ -12,14 +12,23 @@ let yellowCardsAway = 0;
 let redCardsHome = 0;
 let redCardsAway = 0;
 
-const homeTeam = "FC Testowa";
-const awayTeam = "GKS Demo";
+let homeTeam = "FC Testowa";
+let awayTeam = "GKS Demo";
 
 window.onload = () => {
   loadHistoryFromStorage();
 };
 
 function simulateMatch() {
+  // Pobieranie wybranych drużyn
+  homeTeam = document.getElementById("homeTeamSelect").value;
+  awayTeam = document.getElementById("awayTeamSelect").value;
+
+  if (homeTeam === awayTeam) {
+    alert("Wybierz dwie różne drużyny!");
+    return;
+  }
+
   homeGoals = 0;
   awayGoals = 0;
   currentMinute = 0;
@@ -127,7 +136,6 @@ function zapiszDoHistorii(homeTeam, awayTeam, home, away) {
   li.innerText = nowyMeczTekst;
   historia.appendChild(li);
 
-  // LocalStorage
   const zapisane = JSON.parse(localStorage.getItem("history")) || [];
   zapisane.push(nowyMeczTekst);
   localStorage.setItem("history", JSON.stringify(zapisane));
