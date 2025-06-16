@@ -1,3 +1,8 @@
+  // Wczytaj historię z localStorage po załadowaniu strony
+window.onload = function () {
+  loadHistory();
+};
+
 function simulateMatch() {
   const homeTeam = document.getElementById('homeTeamSelect').value;
   const awayTeam = document.getElementById('awayTeamSelect').value;
@@ -45,7 +50,6 @@ function simulateMatch() {
       showGoalAnimation();
     }
 
-    // Losowe kartki
     if (Math.random() < 0.02) {
       let isHome = Math.random() < 0.5;
       if (Math.random() < 0.7) {
@@ -65,6 +69,7 @@ function simulateMatch() {
       clearInterval(interval);
       addCommentary("Koniec meczu!");
       addToHistory(homeTeam, awayTeam, homeScore, awayScore);
+      saveHistory(); // zapisz do localStorage
     }
   }, 200);
 }
@@ -77,7 +82,7 @@ function updateStats(shHome, shAway, yHome, yAway, rHome, rAway) {
   document.getElementById('redCardsHome').textContent = rHome;
   document.getElementById('redCardsAway').textContent = rAway;
 
-  const posHome = 50 + Math.floor(Math.random() * 11 - 5); // losowe odchylenie
+  const posHome = 50 + Math.floor(Math.random() * 11 - 5);
   const posAway = 100 - posHome;
 
   document.getElementById('possessionHome').textContent = posHome;
@@ -94,6 +99,26 @@ function addToHistory(home, away, homeGoals, awayGoals) {
   const li = document.createElement('li');
   li.textContent = `${home} ${homeGoals} - ${awayGoals} ${away}`;
   document.getElementById('history').appendChild(li);
+
+  // Dodaj do historii localStorage
+  const history = JSON.parse(localStorage.getItem("matchHistory")) || [];
+  history.push(`${home} ${homeGoals} - ${awayGoals} ${away}`);
+  localStorage.setItem("matchHistory", JSON.stringify(history));
+}
+
+function loadHistory() {
+  const saved = JSON.parse(localStorage.getItem("matchHistory")) || [];
+  const list = document.getElementById("history");
+  list.innerHTML = "";
+  saved.forEach(match => {
+    const li = document.createElement("li");
+    li.textContent = match;
+    list.appendChild(li);
+  });
+}
+
+function saveHistory() {
+  // Funkcja niepotrzebna, zostaje dla formalności
 }
 
 function showGoalAnimation() {
