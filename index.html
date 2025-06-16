@@ -8,6 +8,25 @@
 <body>
   <h1>Symulator Meczu Piłkarskiego</h1>
 
+  <!-- Wybór drużyn -->
+  <div>
+    <label for="homeTeamSelect">Drużyna domowa:</label>
+    <select id="homeTeamSelect">
+      <option value="FC Testowa">FC Testowa</option>
+      <option value="GKS Demo">GKS Demo</option>
+      <option value="FC Turbo">FC Turbo</option>
+      <option value="LKS Wieśniaki">LKS Wieśniaki</option>
+    </select>
+
+    <label for="awayTeamSelect">Drużyna gości:</label>
+    <select id="awayTeamSelect">
+      <option value="GKS Demo">GKS Demo</option>
+      <option value="FC Testowa">FC Testowa</option>
+      <option value="FC Turbo">FC Turbo</option>
+      <option value="LKS Wieśniaki">LKS Wieśniaki</option>
+    </select>
+  </div>
+
   <button onclick="simulateMatch()">Zagraj mecz</button>
 
   <p id="clock">Czas: 0'</p>
