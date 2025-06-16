@@ -5,6 +5,21 @@ body {
   background-color: #f0f4f8;
 }
 
+.team-selection {
+  margin-bottom: 20px;
+}
+
+label {
+  margin: 0 10px 0 0;
+  font-weight: bold;
+}
+
+select {
+  margin-right: 20px;
+  font-size: 16px;
+  padding: 4px 8px;
+}
+
 button {
   padding: 15px 25px;
   font-size: 18px;
@@ -13,6 +28,7 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 button:hover {
@@ -25,8 +41,9 @@ button:hover {
 }
 
 #result {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
 #history, #commentary {
@@ -51,4 +68,18 @@ button:hover {
 #commentary li {
   background-color: #e7f0ff;
   border-left: 4px solid #007bff;
+}
+
+/* Animacja napisu GOAL */
+.goal-animation {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  font-weight: 900;
+  color: #d32f2f;
+  text-shadow: 2px 2px 5px #000;
+  display: none;
+  z-index: 9999;
 }
