@@ -1,85 +1,49 @@
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 50px;
-  background-color: #f0f4f8;
+  background-color: #f0f0f0;
+  margin: 20px;
+  color: #333;
 }
 
-.team-selection {
-  margin-bottom: 20px;
-}
-
-label {
-  margin: 0 10px 0 0;
-  font-weight: bold;
-}
-
-select {
-  margin-right: 20px;
-  font-size: 16px;
-  padding: 4px 8px;
-}
-
-button {
-  padding: 15px 25px;
-  font-size: 18px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-#clock {
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-#result {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-#history, #commentary {
-  text-align: left;
-  margin-top: 30px;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0;
-}
-
-#history li, #commentary li {
-  font-size: 14px;
-  background-color: #ffffff;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  list-style: none;
-}
-
-#commentary li {
-  background-color: #e7f0ff;
-  border-left: 4px solid #007bff;
-}
-
-/* Animacja napisu GOAL */
+/* Animacja bramki bez zmiany rozmiaru */
 .goal-animation {
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 60px;
-  font-weight: 900;
-  color: #d32f2f;
-  text-shadow: 2px 2px 5px #000;
-  display: none;
-  z-index: 9999;
+  font-size: 2em;          /* Stała wielkość tekstu */
+  color: red;
+  opacity: 0;
+  text-align: center;
+  margin: 20px 0;
+  transition: opacity 0.5s ease;
+}
+
+.goal-animation.show {
+  opacity: 1;
+  animation: blink 1.5s ease forwards;
+}
+
+@keyframes blink {
+  0%, 100% { color: red; }
+  50% { color: yellow; }
+}
+
+/* Styl przycisku */
+button {
+  padding: 10px 15px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.link-button {
+  display: inline-block;
+  margin: 10px 0 20px 0;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.link-button:hover {
+  background-color: #45a049;
 }
