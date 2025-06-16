@@ -9,19 +9,22 @@ function simulateMatch() {
   currentMinute = 0;
   document.getElementById("result").innerText = "Wynik: 0 - 0";
   document.getElementById("clock").innerText = "Czas: 0'";
+  document.getElementById("commentary").innerHTML = "";
   clearInterval(matchInterval);
 
   matchInterval = setInterval(() => {
     currentMinute++;
     document.getElementById("clock").innerText = `Czas: ${currentMinute}'`;
 
-    // Szansa na bramkę co minutę (5%)
+    // 5% szans na bramkę co minutę
     if (Math.random() < 0.05) {
       const strzelilDom = Math.random() < 0.5;
       if (strzelilDom) {
         homeGoals++;
+        dodajKomentarz(`⚽ ${currentMinute}' GOL! FC Testowa zdobywa bramkę!`);
       } else {
         awayGoals++;
+        dodajKomentarz(`⚽ ${currentMinute}' GOL! GKS Demo trafia do siatki!`);
       }
       document.getElementById("result").innerText = `Wynik: ${homeGoals} - ${awayGoals}`;
     }
@@ -29,6 +32,7 @@ function simulateMatch() {
     if (currentMinute >= 90) {
       clearInterval(matchInterval);
       zapiszDoHistorii(homeGoals, awayGoals);
+      dodajKomentarz(`🔚 Koniec meczu! Wynik: ${homeGoals} - ${awayGoals}`);
     }
   }, 100); // 100ms = 1 minuta gry
 }
@@ -39,4 +43,11 @@ function zapiszDoHistorii(home, away) {
   const data = new Date().toLocaleTimeString();
   nowyMecz.innerText = `${data} — FC Testowa ${home} - ${away} GKS Demo`;
   historia.prepend(nowyMecz);
+}
+
+function dodajKomentarz(tekst) {
+  const komentarze = document.getElementById("commentary");
+  const nowy = document.createElement("li");
+  nowy.innerText = tekst;
+  komentarze.prepend(nowy);
 }
