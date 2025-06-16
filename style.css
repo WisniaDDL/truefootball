@@ -24,20 +24,31 @@ button:hover {
   margin-top: 10px;
 }
 
-#history {
+#result {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#history, #commentary {
   text-align: left;
   margin-top: 30px;
-  max-width: 300px;
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
   padding: 0;
 }
 
-#history li {
+#history li, #commentary li {
   background-color: #ffffff;
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   list-style: none;
+}
+
+#commentary li {
+  font-size: 14px;
+  background-color: #e7f0ff;
+  border-left: 4px solid #007bff;
 }
