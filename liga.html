@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Symulator Piłki - Liga</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 20px; }
+    h1, h2 { color: #333; }
+    select, button, a { margin: 10px 0; padding: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #eee; }
+    #matchContainer { margin-top: 20px; }
+    .link-button { display: inline-block; margin-top: 10px; background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Symulator Piłki - Liga</h1>
+  <a href="index.html" class="link-button">🏠 Powrót do Strony Głównej</a>  <div id="start">
+    <label for="teamSelect">Wybierz swoją drużynę:</label>
+    <select id="teamSelect">
+      <option value="FC Testowa">FC Testowa</option>
+      <option value="GKS Demo">GKS Demo</option>
+      <option value="FC Turbo">FC Turbo</option>
+      <option value="LKS Wieśniaki">LKS Wieśniaki</option>
+    </select>
+    <button onclick="startLeague()">Rozpocznij Ligę</button>
+  </div>  <div id="matchContainer" style="display:none;">
+    <h2>Następny mecz</h2>
+    <p id="nextMatch"></p>
+    <button onclick="playNextMatch()">Zagraj mecz</button>
+    <h2>Historia</h2>
+    <ul id="matchHistory"></ul>
+    <h2>Tablica ligowa</h2>
+    <table id="leagueTable">
+      <thead>
+        <tr><th>Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>Br</th><th>+/-</th><th>Pkt</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>  <script>
+const teams = ["FC Testowa", "GKS Demo", "FC Turbo", "LKS Wieśniaki"];
+let userTeam = "";
+let fixtures = [];
+let currentMatch = 0;
+let table = {};
+
+function startLeague() {
+  userTeam = document.getElementById("teamSelect").value;
+  document.getElementById("start").style.display = "none";
+  document.getElementById("matchContainer").style.display = "block";
+
+  // Inicjalizacja tabeli
+  teams.forEach(t => table[t] = { M: 0, W: 0, R: 0, P: 0, Br: 0, Diff: 0, Pts: 0 });
+
+  // Generowanie terminarza (dwumecze)
+  for (let i = 0; i < teams.length; i++) {
+    for (let j = 0; j < teams.length; j++) {
+      if (i !== j) fixtures.push({ home: teams[i], away: teams[j] });
+    }
+  }
+
+  fixtures = shuffle(fixtures); // losowa kolejnosc
+  updateNextMatch();
+  updateTable();
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function playNextMatch() {
+  if (currentMatch >= fixtures.length) return;
+
+  const match = fixtures[currentMatch];
+  const userPlaying = match.home === userTeam || match.away === userTeam;
+
+  const goalsHome = Math.floor(Math.random() * 5);
+  const goalsAway = Math.floor(Math.random() * 5);
+
+  // Historia
+  const hist = document.createElement("li");
+  hist.textContent = `${match.home} ${goalsHome} : ${goalsAway} ${match.away}`;
+  document.getElementById("matchHistory").appendChild(hist);
+
+  // Tabela aktualizacja
+  updateTeamStats(match.home, match.away, goalsHome, goalsAway);
+  updateTable();
+
+  currentMatch++;
+  updateNextMatch();
+}
+
+function updateNextMatch() {
+  if (currentMatch >= fixtures.length) {
+    document.getElementById("nextMatch").innerText = "Sezon zakończony!";
+    return;
+  }
+
+  const match = fixtures[currentMatch];
+  const isUserMatch = match.home === userTeam || match.away === userTeam;
+
+  if (!isUserMatch) {
+    // symulacja automatyczna
+    const goalsHome = Math.floor(Math.random() * 5);
+    const goalsAway = Math.floor(Math.random() * 5);
+    updateTeamStats(match.home, match.away, goalsHome, goalsAway);
+    const hist = document.createElement("li");
+    hist.textContent = `${match.home} ${goalsHome} : ${goalsAway} ${match.away}`;
+    document.getElementById("matchHistory").appendChild(hist);
+    currentMatch++;
+    updateNextMatch();
+  } else {
+    document.getElementById("nextMatch").innerText = `${match.home} vs ${match.away}`;
+  }
+}
+
+function updateTeamStats(home, away, gh, ga) {
+  table[home].M++;
+  table[away].M++;
+  table[home].Br += gh;
+  table[away].Br += ga;
+  table[home].Diff += gh - ga;
+  table[away].Diff += ga - gh;
+
+  if (gh > ga) {
+    table[home].W++;
+    table[away].P++;
+    table[home].Pts += 3;
+  } else if (gh < ga) {
+    table[away].W++;
+    table[home].P++;
+    table[away].Pts += 3;
+  } else {
+    table[home].R++;
+    table[away].R++;
+    table[home].Pts += 1;
+    table[away].Pts += 1;
+  }
+}
+
+function updateTable() {
+  const tbody = document.querySelector("#leagueTable tbody");
+  tbody.innerHTML = "";
+  const sorted = Object.entries(table).sort((a,b) => b[1].Pts - a[1].Pts || b[1].Diff - a[1].Diff);
+  for (const [team, stats] of sorted) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${team}</td><td>${stats.M}</td><td>${stats.W}</td><td>${stats.R}</td><td>${stats.P}</td><td>${stats.Br}</td><td>${stats.Diff}</td><td>${stats.Pts}</td>`;
+    tbody.appendChild(row);
+  }
+}
+  </script></body>
+</html>
