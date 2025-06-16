@@ -39,6 +39,7 @@ button:hover {
 }
 
 #history li, #commentary li {
+  font-size: 14px;
   background-color: #ffffff;
   margin-bottom: 10px;
   padding: 10px;
@@ -48,7 +49,6 @@ button:hover {
 }
 
 #commentary li {
-  font-size: 14px;
   background-color: #e7f0ff;
   border-left: 4px solid #007bff;
 }
