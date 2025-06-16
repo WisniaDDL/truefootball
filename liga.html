@@ -1,84 +1,208 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Symulator Piłki - Liga</title>
   <style>
     html {
-      zoom: 1;
+      font-size: 16px;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      margin: 20px;
-      font-size: 16px;
-      line-height: 1.4;
-      overflow-x: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #d0e8f2 0%, #f0f9ff 100%);
+      margin: 20px auto;
+      max-width: 900px;
+      color: #222;
+      line-height: 1.5;
     }
 
     h1, h2 {
-      color: #333;
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    select, button, a {
-      margin: 10px 0;
-      padding: 5px 10px;
-      font-size: 16px;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
+      color: #1a3e5c;
+      font-weight: 700;
+      margin-bottom: 12px;
       text-align: center;
+      text-shadow: 1px 1px 2px #a4c3d2;
     }
 
-    th {
-      background-color: #eee;
+    #start {
+      text-align: center;
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(26, 62, 92, 0.2);
     }
 
-    #matchContainer {
-      margin-top: 20px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
+    label, select, button {
+      font-size: 1rem;
+    }
+
+    select {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1.5px solid #1a3e5c;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+    select:hover, select:focus {
+      border-color: #4caf50;
+      outline: none;
+    }
+
+    button {
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      margin-left: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 8px rgba(76, 175, 80, 0.4);
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a045;
+    }
+    button:disabled {
+      background-color: #9e9e9e;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     .link-button {
       display: inline-block;
-      margin-top: 10px;
-      background-color: #4CAF50;
+      background-color: #1a3e5c;
       color: white;
       text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 8px rgba(26, 62, 92, 0.6);
+      transition: background-color 0.3s ease;
+    }
+    .link-button:hover {
+      background-color: #145172;
+    }
+
+    #matchContainer {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(26, 62, 92, 0.15);
+    }
+
+    #nextMatch {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a3e5c;
+      margin-bottom: 15px;
+      text-align: center;
+      min-height: 36px;
     }
 
     #matchHistory {
       max-height: 200px;
       overflow-y: auto;
       padding: 0;
-      margin: 10px 0;
+      margin: 10px 0 25px 0;
       list-style: none;
       font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+    #matchHistory li {
+      margin: 6px 8px;
+      padding: 6px 10px;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      transition: background-color 0.3s ease;
+    }
+    #matchHistory li.userMatch {
+      font-weight: 700;
+      color: #2e7d32;
+      background-color: #d0f0c0;
+      box-shadow: 0 0 8px #81c784;
     }
 
-    #matchHistory li {
-      margin-bottom: 4px;
-      padding: 2px 4px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 3px;
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+      margin-top: 10px;
+      table-layout: fixed;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px 6px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    th {
+      background-color: #1a3e5c;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    tbody tr.leader {
+      background-color: #c8e6c9;
+      font-weight: 700;
+      color: #2e7d32;
+      transition: background-color 0.3s ease;
+    }
+
+    tbody tr.bottom {
+      background-color: #ffcdd2;
+      font-weight: 600;
+      color: #c62828;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Progress Bar */
+    #progressBarContainer {
+      width: 100%;
+      background: #ddd;
+      height: 20px;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 15px 0 30px 0;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    #progressBar {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #81c784);
+      width: 0%;
+      transition: width 0.6s ease-in-out;
+      border-radius: 15px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+        margin: 15px 10px;
+      }
+      button, select {
+        font-size: 14px;
+      }
+      th, td {
+        padding: 6px 4px;
+      }
     }
   </style>
 </head>
@@ -88,25 +212,34 @@
 
   <div id="start">
     <label for="teamSelect">Wybierz swoją drużynę:</label>
-    <select id="teamSelect">
+    <select id="teamSelect" aria-label="Wybierz drużynę">
       <option value="FC Testowa">FC Testowa</option>
       <option value="GKS Demo">GKS Demo</option>
       <option value="FC Turbo">FC Turbo</option>
       <option value="LKS Wieśniaki">LKS Wieśniaki</option>
     </select>
-    <button onclick="startLeague()">Rozpocznij Ligę</button>
+    <button id="startBtn" onclick="startLeague()">Rozpocznij Ligę</button>
   </div>
 
   <div id="matchContainer" style="display:none;">
     <h2>Następny mecz</h2>
-    <p id="nextMatch"></p>
-    <button onclick="playNextMatch()">Zagraj mecz</button>
+    <p id="nextMatch" aria-live="polite"></p>
+    <div style="text-align:center;">
+      <button id="playMatchBtn" onclick="playNextMatch()">Zagraj mecz</button>
+    </div>
+
+    <div id="progressBarContainer" aria-label="Postęp sezonu">
+      <div id="progressBar"></div>
+    </div>
 
     <h2>Historia</h2>
-    <ul id="matchHistory"></ul>
+    <ul id="matchHistory" aria-live="polite" aria-atomic="false"></ul>
 
     <h2>Tablica ligowa</h2>
-    <table id="leagueTable">
+    <table id="leagueTable" aria-describedby="leagueDescription">
+      <caption id="leagueDescription" style="text-align:left; font-style:italic; margin-bottom:6px;">
+        Statystyki drużyn w lidze - mecze (M), wygrane (W), remisy (R), porażki (P), bramki (Br), różnica bramek (+/-), punkty (Pkt)
+      </caption>
       <thead>
         <tr><th>Drużyna</th><th>M</th><th>W</th><th>R</th><th>P</th><th>Br</th><th>+/-</th><th>Pkt</th></tr>
       </thead>
@@ -125,9 +258,18 @@
       userTeam = document.getElementById("teamSelect").value;
       document.getElementById("start").style.display = "none";
       document.getElementById("matchContainer").style.display = "block";
+      document.getElementById("playMatchBtn").disabled = false;
 
+      fixtures = [];
+      currentMatch = 0;
+      table = {};
+      document.getElementById("matchHistory").innerHTML = "";
+      document.getElementById("nextMatch").innerText = "";
+
+      // Reset stats for all teams
       teams.forEach(t => table[t] = { M: 0, W: 0, R: 0, P: 0, Br: 0, Diff: 0, Pts: 0 });
 
+      // Generate fixtures - each team plays others twice (home & away)
       for (let i = 0; i < teams.length; i++) {
         for (let j = 0; j < teams.length; j++) {
           if (i !== j) fixtures.push({ home: teams[i], away: teams[j] });
@@ -137,6 +279,7 @@
       fixtures = shuffle(fixtures);
       updateNextMatch();
       updateTable();
+      updateProgressBar();
     }
 
     function shuffle(array) {
@@ -148,28 +291,38 @@
     }
 
     function playNextMatch() {
-      if (currentMatch >= fixtures.length) return;
+      if (currentMatch >= fixtures.length) {
+        document.getElementById("nextMatch").innerText = "Sezon zakończony!";
+        document.getElementById("playMatchBtn").disabled = true;
+        return;
+      }
 
       const match = fixtures[currentMatch];
-      const userPlaying = match.home === userTeam || match.away === userTeam;
+      const isUserMatch = match.home === userTeam || match.away === userTeam;
 
+      // Symuluj wynik meczu
       const goalsHome = Math.floor(Math.random() * 5);
       const goalsAway = Math.floor(Math.random() * 5);
 
+      // Zaktualizuj historię z wyróżnieniem meczów użytkownika
       const hist = document.createElement("li");
       hist.textContent = `${match.home} ${goalsHome} : ${goalsAway} ${match.away}`;
+      if (isUserMatch) hist.classList.add("userMatch");
       document.getElementById("matchHistory").appendChild(hist);
+      hist.scrollIntoView({ behavior: "smooth", block: "end" });
 
       updateTeamStats(match.home, match.away, goalsHome, goalsAway);
       updateTable();
 
       currentMatch++;
       updateNextMatch();
+      updateProgressBar();
     }
 
     function updateNextMatch() {
       if (currentMatch >= fixtures.length) {
         document.getElementById("nextMatch").innerText = "Sezon zakończony!";
+        document.getElementById("playMatchBtn").disabled = true;
         return;
       }
 
@@ -177,6 +330,7 @@
       const isUserMatch = match.home === userTeam || match.away === userTeam;
 
       if (!isUserMatch) {
+        // Jeśli następny mecz nie dotyczy użytkownika, tylko dodajemy go do historii i od razu przechodzimy dalej
         const goalsHome = Math.floor(Math.random() * 5);
         const goalsAway = Math.floor(Math.random() * 5);
         updateTeamStats(match.home, match.away, goalsHome, goalsAway);
@@ -184,8 +338,10 @@
         hist.textContent = `${match.home} ${goalsHome} : ${goalsAway} ${match.away}`;
         document.getElementById("matchHistory").appendChild(hist);
         currentMatch++;
+        updateTable();
         updateNextMatch();
       } else {
+        // Wyświetl mecz użytkownika, czekaj na kliknięcie "Zagraj mecz"
         document.getElementById("nextMatch").innerText = `${match.home} vs ${match.away}`;
       }
     }
@@ -217,12 +373,34 @@
     function updateTable() {
       const tbody = document.querySelector("#leagueTable tbody");
       tbody.innerHTML = "";
-      const sorted = Object.entries(table).sort((a, b) => b[1].Pts - a[1].Pts || b[1].Diff - a[1].Diff);
-      for (const [team, stats] of sorted) {
+      const sorted = Object.entries(table).sort((a, b) => {
+        if (b[1].Pts !== a[1].Pts) return b[1].Pts - a[1].Pts;
+        if (b[1].Diff !== a[1].Diff) return b[1].Diff - a[1].Diff;
+        return b[1].Br - a[1].Br;
+      });
+
+      sorted.forEach(([team, stats], index) => {
         const row = document.createElement("tr");
-        row.innerHTML = `<td>${team}</td><td>${stats.M}</td><td>${stats.W}</td><td>${stats.R}</td><td>${stats.P}</td><td>${stats.Br}</td><td>${stats.Diff}</td><td>${stats.Pts}</td>`;
+        if (index === 0) row.classList.add("leader");
+        if (index === sorted.length - 1) row.classList.add("bottom");
+
+        row.innerHTML = `
+          <td>${team}${team === userTeam ? " ⭐" : ""}</td>
+          <td>${stats.M}</td>
+          <td>${stats.W}</td>
+          <td>${stats.R}</td>
+          <td>${stats.P}</td>
+          <td>${stats.Br}</td>
+          <td>${stats.Diff > 0 ? "+" + stats.Diff : stats.Diff}</td>
+          <td>${stats.Pts}</td>
+        `;
         tbody.appendChild(row);
-      }
+      });
+    }
+
+    function updateProgressBar() {
+      const progress = currentMatch / fixtures.length * 100;
+      document.getElementById("progressBar").style.width = progress + "%";
     }
   </script>
 </body>
