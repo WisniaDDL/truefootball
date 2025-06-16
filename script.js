@@ -1,152 +1,105 @@
-let homeGoals = 0;
-let awayGoals = 0;
-let currentMinute = 0;
-let matchInterval;
-
-let shotsHome = 0;
-let shotsAway = 0;
-let possessionHome = 50;
-let possessionAway = 50;
-let yellowCardsHome = 0;
-let yellowCardsAway = 0;
-let redCardsHome = 0;
-let redCardsAway = 0;
-
-let homeTeam = "FC Testowa";
-let awayTeam = "GKS Demo";
-
-window.onload = () => {
-  loadHistoryFromStorage();
-};
-
 function simulateMatch() {
-  // Pobieranie wybranych drużyn
-  homeTeam = document.getElementById("homeTeamSelect").value;
-  awayTeam = document.getElementById("awayTeamSelect").value;
+  const homeTeam = document.getElementById('homeTeamSelect').value;
+  const awayTeam = document.getElementById('awayTeamSelect').value;
 
   if (homeTeam === awayTeam) {
-    alert("Wybierz dwie różne drużyny!");
+    alert("Wybierz dwie różne drużyny.");
     return;
   }
 
-  homeGoals = 0;
-  awayGoals = 0;
-  currentMinute = 0;
-  shotsHome = 0;
-  shotsAway = 0;
-  possessionHome = 50;
-  possessionAway = 50;
-  yellowCardsHome = 0;
-  yellowCardsAway = 0;
-  redCardsHome = 0;
-  redCardsAway = 0;
+  let time = 0;
+  let homeScore = 0;
+  let awayScore = 0;
 
-  document.getElementById("result").innerText = `Wynik: 0 - 0`;
-  document.getElementById("clock").innerText = "Czas: 0'";
-  document.getElementById("commentary").innerHTML = "";
-  updateStatsDisplay();
+  let shotsHome = 0;
+  let shotsAway = 0;
+  let yellowHome = 0;
+  let yellowAway = 0;
+  let redHome = 0;
+  let redAway = 0;
 
-  clearInterval(matchInterval);
+  let commentary = document.getElementById('commentary');
+  commentary.innerHTML = "";
 
-  matchInterval = setInterval(() => {
-    currentMinute++;
-    document.getElementById("clock").innerText = `Czas: ${currentMinute}'`;
+  document.getElementById('clock').textContent = "Czas: 0'";
+  document.getElementById('result').textContent = `Wynik: 0 - 0`;
 
-    if(currentMinute % 10 === 0){
-      const change = Math.floor(Math.random() * 11) - 5;
-      possessionHome = Math.min(100, Math.max(0, possessionHome + change));
-      possessionAway = 100 - possessionHome;
-    }
+  updateStats(0, 0, 0, 0, 0, 0);
 
-    if (Math.random() < 0.15) {
-      const shotHome = Math.random() < 0.5;
-      if(shotHome) shotsHome++;
-      else shotsAway++;
+  const interval = setInterval(() => {
+    time++;
+    document.getElementById('clock').textContent = `Czas: ${time}'`;
 
-      if(Math.random() < 0.3){
-        if(shotHome){
-          homeGoals++;
-          showGoalAnimation();
-          dodajKomentarz(`${currentMinute}' GOL! ${homeTeam} zdobywa bramkę.`);
-        } else {
-          awayGoals++;
-          showGoalAnimation();
-          dodajKomentarz(`${currentMinute}' GOL! ${awayTeam} trafia do siatki.`);
-        }
+    if (Math.random() < 0.05) {
+      let isHome = Math.random() < 0.5;
+      if (isHome) {
+        homeScore++;
+        shotsHome++;
+        addCommentary(`${homeTeam} zdobywa bramkę! (${time}')`);
       } else {
-        dodajKomentarz(`${currentMinute}' Strzał ${shotHome ? homeTeam : awayTeam}, ale bez gola.`);
+        awayScore++;
+        shotsAway++;
+        addCommentary(`${awayTeam} zdobywa bramkę! (${time}')`);
       }
-      updateStatsDisplay();
-      document.getElementById("result").innerText = `Wynik: ${homeGoals} - ${awayGoals}`;
+      document.getElementById('result').textContent = `Wynik: ${homeScore} - ${awayScore}`;
+      showGoalAnimation();
     }
 
-    if(Math.random() < 0.02){
-      const cardHome = Math.random() < 0.5;
-      const yellowOrRed = Math.random() < 0.8 ? "żółtą" : "czerwoną";
-      if(cardHome){
-        if(yellowOrRed === "żółtą") yellowCardsHome++;
-        else redCardsHome++;
-        dodajKomentarz(`${currentMinute}' ${homeTeam} otrzymuje ${yellowOrRed} kartkę.`);
+    // Losowe kartki
+    if (Math.random() < 0.02) {
+      let isHome = Math.random() < 0.5;
+      if (Math.random() < 0.7) {
+        if (isHome) yellowHome++;
+        else yellowAway++;
+        addCommentary(`${isHome ? homeTeam : awayTeam} otrzymuje żółtą kartkę! (${time}')`);
       } else {
-        if(yellowOrRed === "żółtą") yellowCardsAway++;
-        else redCardsAway++;
-        dodajKomentarz(`${currentMinute}' ${awayTeam} otrzymuje ${yellowOrRed} kartkę.`);
+        if (isHome) redHome++;
+        else redAway++;
+        addCommentary(`${isHome ? homeTeam : awayTeam} otrzymuje czerwoną kartkę! (${time}')`);
       }
-      updateStatsDisplay();
     }
 
-    if (currentMinute >= 90) {
-      clearInterval(matchInterval);
-      zapiszDoHistorii(homeTeam, awayTeam, homeGoals, awayGoals);
-      dodajKomentarz(`Koniec meczu. Wynik: ${homeGoals} - ${awayGoals}`);
+    updateStats(shotsHome, shotsAway, yellowHome, yellowAway, redHome, redAway);
+
+    if (time >= 90) {
+      clearInterval(interval);
+      addCommentary("Koniec meczu!");
+      addToHistory(homeTeam, awayTeam, homeScore, awayScore);
     }
-  }, 100);
+  }, 200);
 }
 
-function dodajKomentarz(tresc) {
-  const komentarz = document.createElement("li");
-  komentarz.innerText = tresc;
-  document.getElementById("commentary").appendChild(komentarz);
+function updateStats(shHome, shAway, yHome, yAway, rHome, rAway) {
+  document.getElementById('shotsHome').textContent = shHome;
+  document.getElementById('shotsAway').textContent = shAway;
+  document.getElementById('yellowCardsHome').textContent = yHome;
+  document.getElementById('yellowCardsAway').textContent = yAway;
+  document.getElementById('redCardsHome').textContent = rHome;
+  document.getElementById('redCardsAway').textContent = rAway;
+
+  const posHome = 50 + Math.floor(Math.random() * 11 - 5); // losowe odchylenie
+  const posAway = 100 - posHome;
+
+  document.getElementById('possessionHome').textContent = posHome;
+  document.getElementById('possessionAway').textContent = posAway;
+}
+
+function addCommentary(text) {
+  const li = document.createElement('li');
+  li.textContent = text;
+  document.getElementById('commentary').appendChild(li);
+}
+
+function addToHistory(home, away, homeGoals, awayGoals) {
+  const li = document.createElement('li');
+  li.textContent = `${home} ${homeGoals} - ${awayGoals} ${away}`;
+  document.getElementById('history').appendChild(li);
 }
 
 function showGoalAnimation() {
-  const anim = document.getElementById("goalAnimation");
-  anim.style.display = "block";
+  const goalDiv = document.getElementById('goalAnimation');
+  goalDiv.classList.add('show');
   setTimeout(() => {
-    anim.style.display = "none";
-  }, 1000);
-}
-
-function updateStatsDisplay() {
-  document.getElementById("shotsHome").innerText = shotsHome;
-  document.getElementById("shotsAway").innerText = shotsAway;
-  document.getElementById("possessionHome").innerText = possessionHome;
-  document.getElementById("possessionAway").innerText = possessionAway;
-  document.getElementById("yellowCardsHome").innerText = yellowCardsHome;
-  document.getElementById("yellowCardsAway").innerText = yellowCardsAway;
-  document.getElementById("redCardsHome").innerText = redCardsHome;
-  document.getElementById("redCardsAway").innerText = redCardsAway;
-}
-
-function zapiszDoHistorii(homeTeam, awayTeam, home, away) {
-  const historia = document.getElementById("history");
-  const data = new Date().toLocaleTimeString();
-  const nowyMeczTekst = `${data} - ${homeTeam} ${home} : ${away} ${awayTeam}`;
-  const li = document.createElement("li");
-  li.innerText = nowyMeczTekst;
-  historia.appendChild(li);
-
-  const zapisane = JSON.parse(localStorage.getItem("history")) || [];
-  zapisane.push(nowyMeczTekst);
-  localStorage.setItem("history", JSON.stringify(zapisane));
-}
-
-function loadHistoryFromStorage() {
-  const historia = document.getElementById("history");
-  const zapisane = JSON.parse(localStorage.getItem("history")) || [];
-  zapisane.forEach(text => {
-    const li = document.createElement("li");
-    li.innerText = text;
-    historia.appendChild(li);
-  });
+    goalDiv.classList.remove('show');
+  }, 1500);
 }
