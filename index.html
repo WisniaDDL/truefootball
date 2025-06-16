@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>True Football Lite</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>FC Testowa vs GKS Demo</h1>
-    <button onclick="simulateMatch()">Zagraj mecz</button>
-    <p id="result"></p>
-    <script src="script.js"></script>
-  </body>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>True Football - Symulacja Meczu</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>FC Testowa vs GKS Demo</h1>
+  <button onclick="simulateMatch()">Zagraj mecz</button>
+
+  <p id="clock">Czas: 0'</p>
+  <p id="result">Wynik: 0 - 0</p>
+
+  <h2>Historia meczów</h2>
+  <ul id="history"></ul>
+
+  <script src="script.js"></script>
+</body>
 </html>
