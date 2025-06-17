@@ -4,19 +4,211 @@
   <meta charset="UTF-8" />
   <title>Symulator Piłki - Liga</title>
   <style>
-    /* (tutaj cały Twój styl bez zmian) */
-    /* ... */
+    html {
+      font-size: 16px;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #d0e8f2 0%, #f0f9ff 100%);
+      margin: 20px auto;
+      max-width: 900px;
+      color: #222;
+      line-height: 1.5;
+    }
+
+    h1, h2 {
+      color: #1a3e5c;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+      text-shadow: 1px 1px 2px #a4c3d2;
+    }
+
+    #start {
+      text-align: center;
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(26, 62, 92, 0.2);
+    }
+
+    label, select, button {
+      font-size: 1rem;
+    }
+
+    select {
+      padding: 6px 10px;
+      border-radius: 5px;
+      border: 1.5px solid #1a3e5c;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+    select:hover, select:focus {
+      border-color: #4caf50;
+      outline: none;
+    }
+
+    button {
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      margin-left: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 8px rgba(76, 175, 80, 0.4);
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a045;
+    }
+    button:disabled {
+      background-color: #9e9e9e;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .link-button {
+      display: inline-block;
+      background-color: #1a3e5c;
+      color: white;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 8px rgba(26, 62, 92, 0.6);
+      transition: background-color 0.3s ease;
+    }
+    .link-button:hover {
+      background-color: #145172;
+    }
+
+    #matchContainer {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(26, 62, 92, 0.15);
+    }
+
+    #nextMatch {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1a3e5c;
+      margin-bottom: 15px;
+      text-align: center;
+      min-height: 36px;
+    }
+
+    #matchHistory {
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 0;
+      margin: 10px 0 25px 0;
+      list-style: none;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+    #matchHistory li {
+      margin: 6px 8px;
+      padding: 6px 10px;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      transition: background-color 0.3s ease;
+    }
+    #matchHistory li.userMatch {
+      font-weight: 700;
+      color: #2e7d32;
+      background-color: #d0f0c0;
+      box-shadow: 0 0 8px #81c784;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+      margin-top: 10px;
+      table-layout: fixed;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px 6px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    th {
+      background-color: #1a3e5c;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    tbody tr.leader {
+      background-color: #c8e6c9;
+      font-weight: 700;
+      color: #2e7d32;
+      transition: background-color 0.3s ease;
+    }
+
+    tbody tr.bottom {
+      background-color: #ffcdd2;
+      font-weight: 600;
+      color: #c62828;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Progress Bar */
+    #progressBarContainer {
+      width: 100%;
+      background: #ddd;
+      height: 20px;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 15px 0 30px 0;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    #progressBar {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #81c784);
+      width: 0%;
+      transition: width 0.6s ease-in-out;
+      border-radius: 15px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+        margin: 15px 10px;
+      }
+      button, select {
+        font-size: 14px;
+      }
+      th, td {
+        padding: 6px 4px;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>Symulator Piłki - Liga</h1>
   <a href="index.html" class="link-button">🏠 Powrót do Strony Głównej</a>
-
-  <div id="saveNotice" style="display:none; text-align:center; margin-bottom:15px; background:#d0f0c0; padding:10px; border-radius:8px; box-shadow:0 0 10px #81c784;">
-    Zapisana kariera: <span id="saveInfo"></span><br/>
-    <button onclick="loadCareer()">Wczytaj karierę</button>
-    <button onclick="resetCareer()" style="margin-left: 10px; background:#e57373;">Usuń zapis i zacznij nową</button>
-  </div>
 
   <div id="start">
     <label for="teamSelect">Wybierz swoją drużynę:</label>
@@ -61,25 +253,9 @@
     let fixtures = [];
     let currentMatch = 0;
     let table = {};
-    let careerStartDate = null;
-
-    const saveKey = "footballCareerSave";
-
-    // Sprawdź czy jest zapis kariery przy starcie
-    window.onload = () => {
-      const savedCareer = localStorage.getItem(saveKey);
-      if (savedCareer) {
-        const data = JSON.parse(savedCareer);
-        document.getElementById("saveInfo").textContent = `Drużyna: ${data.userTeam}, rozpoczęta: ${new Date(data.careerStartDate).toLocaleString()}`;
-        document.getElementById("saveNotice").style.display = "block";
-        document.getElementById("start").style.display = "none";
-      }
-    };
 
     function startLeague() {
       userTeam = document.getElementById("teamSelect").value;
-      careerStartDate = new Date().toISOString();
-
       document.getElementById("start").style.display = "none";
       document.getElementById("matchContainer").style.display = "block";
       document.getElementById("playMatchBtn").disabled = false;
@@ -104,51 +280,6 @@
       updateNextMatch();
       updateTable();
       updateProgressBar();
-
-      saveCareer(); // Zapisz start kariery
-    }
-
-    function loadCareer() {
-      const savedCareer = localStorage.getItem(saveKey);
-      if (!savedCareer) return alert("Brak zapisu kariery.");
-
-      const data = JSON.parse(savedCareer);
-
-      userTeam = data.userTeam;
-      fixtures = data.fixtures;
-      currentMatch = data.currentMatch;
-      table = data.table;
-      careerStartDate = data.careerStartDate;
-
-      // Ustaw UI
-      document.getElementById("start").style.display = "none";
-      document.getElementById("matchContainer").style.display = "block";
-      document.getElementById("playMatchBtn").disabled = currentMatch >= fixtures.length;
-
-      // Odtwórz historię meczów
-      const matchHistoryEl = document.getElementById("matchHistory");
-      matchHistoryEl.innerHTML = "";
-      data.matchHistory.forEach(match => {
-        const li = document.createElement("li");
-        li.textContent = match.text;
-        if (match.isUserMatch) li.classList.add("userMatch");
-        matchHistoryEl.appendChild(li);
-      });
-      matchHistoryEl.scrollTop = matchHistoryEl.scrollHeight;
-
-      updateTable();
-      updateProgressBar();
-      updateNextMatch();
-
-      document.getElementById("saveNotice").style.display = "none";
-    }
-
-    function resetCareer() {
-      if (confirm("Czy na pewno chcesz usunąć zapis i rozpocząć nową karierę?")) {
-        localStorage.removeItem(saveKey);
-        document.getElementById("saveNotice").style.display = "none";
-        document.getElementById("start").style.display = "block";
-      }
     }
 
     function shuffle(array) {
@@ -173,7 +304,7 @@
       const goalsHome = Math.floor(Math.random() * 5);
       const goalsAway = Math.floor(Math.random() * 5);
 
-      // Dodaj do historii
+      // Zaktualizuj historię z wyróżnieniem meczów użytkownika
       const hist = document.createElement("li");
       hist.textContent = `${match.home} ${goalsHome} : ${goalsAway} ${match.away}`;
       if (isUserMatch) hist.classList.add("userMatch");
@@ -186,8 +317,6 @@
       currentMatch++;
       updateNextMatch();
       updateProgressBar();
-
-      saveCareer(); // Zapis po meczu
     }
 
     function updateNextMatch() {
@@ -201,7 +330,7 @@
       const isUserMatch = match.home === userTeam || match.away === userTeam;
 
       if (!isUserMatch) {
-        // Automatycznie rozgrywaj mecze niezwiązane z użytkownikiem
+        // Jeśli następny mecz nie dotyczy użytkownika, tylko dodajemy go do historii i od razu przechodzimy dalej
         const goalsHome = Math.floor(Math.random() * 5);
         const goalsAway = Math.floor(Math.random() * 5);
         updateTeamStats(match.home, match.away, goalsHome, goalsAway);
@@ -211,10 +340,9 @@
         currentMatch++;
         updateTable();
         updateNextMatch();
-        saveCareer(); // Aktualizuj zapis po automatycznych meczach
       } else {
+        // Wyświetl mecz użytkownika, czekaj na kliknięcie "Zagraj mecz"
         document.getElementById("nextMatch").innerText = `${match.home} vs ${match.away}`;
-        document.getElementById("playMatchBtn").disabled = false;
       }
     }
 
@@ -272,3 +400,8 @@
 
     function updateProgressBar() {
       const progress = currentMatch / fixtures.length * 100;
+      document.getElementById("progressBar").style.width = progress + "%";
+    }
+  </script>
+</body>
+</html>
